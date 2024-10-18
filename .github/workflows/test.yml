@@ -67,7 +67,7 @@ jobs:
         done
 
     - name: Run unit tests
-      run: mvn test
+      run: mvn test -Dspring.profiles.active=dev
 
     - name: Run integration tests
       run: mvn verify -P integration-test
