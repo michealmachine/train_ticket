@@ -1,0 +1,6 @@
+{
+  "image": "mcr.microsoft.com/devcontainers/universal:2",
+  "ghcr.io/devcontainers-extra/features/jmc-sdkman:2": "17",
+  "features": {
+  }
+}
