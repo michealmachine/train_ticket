@@ -12,6 +12,8 @@ services:
       - "3306:3306"
     networks:
       - train_ticket_network
+    volumes:
+      - ./src/main/resources/db/gith:/docker-entrypoint-initdb.d
 
   redis:
     image: redis:latest

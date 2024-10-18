@@ -49,6 +49,12 @@ jobs:
     - name: Install dependencies
       run: mvn install -DskipTests
 
+    - name: Import database files
+      run: |
+        for file in src/main/resources/db/gith/*.sql; do
+          mysql -h 127.0.0.1 -P 3306 -u user -ppassword train_ticket < "$file"
+        done
+
     - name: Run unit tests
       run: mvn test
 
