@@ -2,6 +2,7 @@ package com.demo12306.back.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.demo12306.back.common.R;
+import com.demo12306.back.entity.*;
 import com.demo12306.back.entity.TrainNumberMeta;
 import com.demo12306.back.service.TrainNumberMetaService;
 import com.demo12306.back.service.TicketService;
