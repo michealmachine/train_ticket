@@ -54,7 +54,7 @@ jobs:
 
     - name: Grant privileges to user
       run: |
-        mysql -h 127.0.0.1 -u root -prootpassword -e "GRANT ALL PRIVILEGES ON train_ticket.* TO 'user'@'%'; FLUSH PRIVILEGES;"
+        mysql -h 127.0.0.1 -u root -prootpassword -e "GRANT ALL PRIVILEGES ON train_ticket.* TO 'user'@'%' IDENTIFIED BY 'password'; FLUSH PRIVILEGES;"
 
     - name: Install dependencies
       run: mvn install -DskipTests
@@ -62,7 +62,8 @@ jobs:
     - name: Import database files
       run: |
         for file in src/main/resources/db/gith/*.sql; do
-          mysql -h 127.0.0.1 -u user -ppassword train_ticket < "$file"
+          echo "Importing $file"
+          mysql -h 127.0.0.1 -u user -ppassword train_ticket < "$file" || exit 1
         done
 
     - name: Run unit tests
