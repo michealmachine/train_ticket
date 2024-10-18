@@ -63,7 +63,7 @@ jobs:
       run: |
         for file in src/main/resources/db/gith/*.sql; do
           echo "Importing $file"
-          mysql -h 127.0.0.1 -u user -ppassword train_ticket < "$file" || exit 1
+          mysql -h 127.0.0.1 -u user -ppassword gith < "$file" || exit 1
         done
 
     - name: Run unit tests
