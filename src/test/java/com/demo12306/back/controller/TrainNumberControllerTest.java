@@ -11,6 +11,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -43,9 +45,14 @@ public class TrainNumberControllerTest {
         List<RailNode> nodes = Arrays.asList(new RailNode(), new RailNode());
         when(trainNumberService.save(any())).thenReturn(true);
 
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        MockHttpServletResponse response = new MockHttpServletResponse();
+
         mockMvc.perform(post("/number")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("[{\"id\":1,\"startStationId\":1,\"endStationId\":2,\"price\":100},{\"id\":2,\"startStationId\":2,\"endStationId\":3,\"price\":150}]"))
+                .content("[{\"id\":1,\"startStationId\":1,\"endStationId\":2,\"price\":100},{\"id\":2,\"startStationId\":2,\"endStationId\":3,\"price\":150}]")
+                .requestAttr("request", request)
+                .requestAttr("response", response))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(1))
                 .andExpect(jsonPath("$.msg").value("添加成功"));
@@ -58,9 +65,14 @@ public class TrainNumberControllerTest {
         Page<TrainNumber> page = new Page<>();
         when(trainNumberService.getTrainsNumberPage(anyInt(), anyInt(), any())).thenReturn(page);
 
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        MockHttpServletResponse response = new MockHttpServletResponse();
+
         mockMvc.perform(get("/number/page")
                 .param("page", "1")
-                .param("pageSize", "10"))
+                .param("pageSize", "10")
+                .requestAttr("request", request)
+                .requestAttr("response", response))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(1));
 
@@ -72,9 +84,14 @@ public class TrainNumberControllerTest {
         List<TrainNumber> trainNumbers = Arrays.asList(new TrainNumber(), new TrainNumber());
         when(trainNumberService.findTrainsBetweenStations(anyInt(), anyInt())).thenReturn(trainNumbers);
 
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        MockHttpServletResponse response = new MockHttpServletResponse();
+
         mockMvc.perform(get("/number")
                 .param("start", "1")
-                .param("end", "2"))
+                .param("end", "2")
+                .requestAttr("request", request)
+                .requestAttr("response", response))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(1));
 
@@ -85,7 +102,12 @@ public class TrainNumberControllerTest {
     public void testDelete() throws Exception {
         when(trainNumberService.delete(anyInt())).thenReturn(true);
 
-        mockMvc.perform(delete("/number/1"))
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        MockHttpServletResponse response = new MockHttpServletResponse();
+
+        mockMvc.perform(delete("/number/1")
+                .requestAttr("request", request)
+                .requestAttr("response", response))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(1))
                 .andExpect(jsonPath("$.msg").value("删除成功"));

@@ -9,6 +9,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -42,9 +44,14 @@ public class NodeControllerTest {
         when(nodeService.getOne(any())).thenReturn(null);
         when(nodeService.save(any(Node.class))).thenReturn(true);
 
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        MockHttpServletResponse response = new MockHttpServletResponse();
+
         mockMvc.perform(post("/node")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"id\":1,\"name\":\"Test Node\"}"))
+                        .content("{\"id\":1,\"name\":\"Test Node\"}")
+                        .requestAttr("request", request)
+                        .requestAttr("response", response))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(1))
                 .andExpect(jsonPath("$.msg").value("添加成功"));
@@ -57,7 +64,12 @@ public class NodeControllerTest {
         List<Node> nodes = Arrays.asList(new Node(1, "Node1"), new Node(2, "Node2"));
         when(nodeService.list()).thenReturn(nodes);
 
-        mockMvc.perform(get("/node"))
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        MockHttpServletResponse response = new MockHttpServletResponse();
+
+        mockMvc.perform(get("/node")
+                        .requestAttr("request", request)
+                        .requestAttr("response", response))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(1))
                 .andExpect(jsonPath("$.data[0].id").value(1))
@@ -72,7 +84,12 @@ public class NodeControllerTest {
     public void testDrop() throws Exception {
         when(nodeService.remove(any())).thenReturn(true);
 
-        mockMvc.perform(delete("/node/1"))
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        MockHttpServletResponse response = new MockHttpServletResponse();
+
+        mockMvc.perform(delete("/node/1")
+                        .requestAttr("request", request)
+                        .requestAttr("response", response))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(1))
                 .andExpect(jsonPath("$.msg").value("删除成功"));

@@ -10,10 +10,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpServletResponse;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,7 +19,6 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 public class UserControllerTest {
@@ -52,10 +49,14 @@ public class UserControllerTest {
 
         when(userService.getOne(any())).thenReturn(userFromDb);
 
-        R<Object> response = userController.login(user);
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        request.addHeader("Authorization", "Bearer token");
+        MockHttpServletResponse response = new MockHttpServletResponse();
 
-        assertEquals(1, response.getCode());
-        assertEquals("testUser", ((Map<String, Object>) response.getData()).get("username"));
+        R<Object> responseEntity = userController.login(user);
+
+        assertEquals(1, responseEntity.getCode());
+        assertEquals("testUser", ((Map<String, Object>) responseEntity.getData()).get("username"));
         verify(userService, times(1)).getOne(any());
     }
 
@@ -65,10 +66,13 @@ public class UserControllerTest {
         user.setUsername("testUser");
         user.setPassword("testPassword");
 
-        R<String> response = userController.save(user);
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        MockHttpServletResponse response = new MockHttpServletResponse();
 
-        assertEquals(1, response.getCode());
-        assertEquals("添加成功", response.getData());
+        R<String> responseEntity = userController.save(user);
+
+        assertEquals(1, responseEntity.getCode());
+        assertEquals("添加成功", responseEntity.getData());
         verify(userService, times(1)).save(user);
     }
 
@@ -78,10 +82,13 @@ public class UserControllerTest {
         ids.add(1);
         ids.add(2);
 
-        R<String> response = userController.status(ids);
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        MockHttpServletResponse response = new MockHttpServletResponse();
 
-        assertEquals(1, response.getCode());
-        assertEquals("修改成功", response.getData());
+        R<String> responseEntity = userController.status(ids);
+
+        assertEquals(1, responseEntity.getCode());
+        assertEquals("修改成功", responseEntity.getData());
         verify(userService, times(1)).update(any());
     }
 
@@ -90,10 +97,13 @@ public class UserControllerTest {
         Page<User> page = new Page<>(1, 10);
         when(userService.page(any(), any())).thenReturn(page);
 
-        R<Page> response = userController.page(1, 10, "testUser");
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        MockHttpServletResponse response = new MockHttpServletResponse();
 
-        assertEquals(1, response.getCode());
-        assertEquals(page, response.getData());
+        R<Page> responseEntity = userController.page(1, 10, "testUser");
+
+        assertEquals(1, responseEntity.getCode());
+        assertEquals(page, responseEntity.getData());
         verify(userService, times(1)).page(any(), any());
     }
 }
