@@ -1,7 +1,7 @@
 package com.demo12306.back.controller;
 
 import com.demo12306.back.common.R;
-import com.demo12306.back.entity.Node;
+import com.demo12306.back.entity;
 import com.demo12306.back.service.NodeService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
