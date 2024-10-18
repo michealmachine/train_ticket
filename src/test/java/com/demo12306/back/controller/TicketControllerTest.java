@@ -11,6 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpServletResponse;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -32,6 +33,7 @@ public class TicketControllerTest {
     public void testSave() {
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.addHeader("Authorization", "Bearer token");
+        MockHttpServletResponse response = new MockHttpServletResponse();
 
         when(JwtUtils.getIdFromToken("Bearer token")).thenReturn(1);
         when(ticketService.saveByNumber(1, 1, 1, 1)).thenReturn(true);
@@ -46,6 +48,7 @@ public class TicketControllerTest {
     public void testPage() {
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.addHeader("Authorization", "Bearer token");
+        MockHttpServletResponse response = new MockHttpServletResponse();
 
         when(JwtUtils.getIdFromToken("Bearer token")).thenReturn(1);
 
