@@ -16,7 +16,7 @@ jobs:
         image: mysql:8.0
         env:
           MYSQL_ROOT_PASSWORD: rootpassword
-          MYSQL_DATABASE: train_ticket
+          MYSQL_DATABASE: gith
           MYSQL_USER: user
           MYSQL_PASSWORD: password
         ports:
