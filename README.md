@@ -13,3 +13,116 @@
     - 实现购物车功能，支持用户添加、修改和删除购物车中的票务信息。
     - 实现用户和管理员的权限管理，不同角色具有不同的操作权限。
 **前端链接https://github.com/michealmachine/train_ticket_front**
+
+## 使用 Docker Compose 运行项目
+
+1. 确保已安装 Docker 和 Docker Compose。
+2. 在项目根目录下创建 `docker-compose.yml` 文件，并添加以下内容：
+
+```yaml
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: train_ticket
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    ports:
+      - "3306:3306"
+    networks:
+      - train_ticket_network
+
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    networks:
+      - train_ticket_network
+
+networks:
+  train_ticket_network:
+    driver: bridge
+```
+
+3. 在项目根目录下运行以下命令启动服务：
+
+```sh
+docker-compose up -d
+```
+
+4. 服务启动后，可以通过以下命令查看运行状态：
+
+```sh
+docker-compose ps
+```
+
+## 使用 GitHub Actions 运行测试
+
+1. 在项目根目录下创建 `.github/workflows/test.yml` 文件，并添加以下内容：
+
+```yaml
+name: Java CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: rootpassword
+          MYSQL_DATABASE: train_ticket
+          MYSQL_USER: user
+          MYSQL_PASSWORD: password
+        ports:
+          - 3306:3306
+      redis:
+        image: redis:latest
+        ports:
+          - 6379:6379
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v2
+      with:
+        java-version: '17'
+
+    - name: Cache Maven packages
+      uses: actions/cache@v2
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-maven-
+
+    - name: Install dependencies
+      run: mvn install -DskipTests
+
+    - name: Set up Docker Compose
+      run: docker-compose up -d
+
+    - name: Test Docker Compose
+      run: docker-compose ps
+
+    - name: Run tests
+      run: mvn test
+
+    - name: Run integration tests
+      run: mvn verify -P integration-test
+```
+
+2. 每次推送代码到 `main` 分支时，GitHub Actions 将自动运行测试。
