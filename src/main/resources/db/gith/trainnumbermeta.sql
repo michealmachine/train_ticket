@@ -4,4 +4,3 @@ create table gith.trainnumbermeta
         primary key,
     available_seats int null
 );
-

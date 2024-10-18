@@ -6,4 +6,3 @@ create table gith.node
     constraint name
         unique (name)
 );
-

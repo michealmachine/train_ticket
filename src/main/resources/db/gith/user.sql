@@ -11,4 +11,3 @@ create table gith.user
     constraint username
         unique (username)
 );
-

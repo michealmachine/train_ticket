@@ -8,4 +8,3 @@ create table gith.ticket
     end_id   int null,
     price    int null
 );
-
