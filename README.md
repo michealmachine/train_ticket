@@ -77,6 +77,21 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: rootpassword
+          MYSQL_DATABASE: train_ticket
+          MYSQL_USER: user
+          MYSQL_PASSWORD: password
+        ports:
+          - 3306:3306
+      redis:
+        image: redis:latest
+        ports:
+          - 6379:6379
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
@@ -97,8 +112,17 @@ jobs:
     - name: Install dependencies
       run: mvn install -DskipTests
 
+    - name: Set up Docker Compose
+      run: docker-compose up -d
+
+    - name: Test Docker Compose
+      run: docker-compose ps
+
     - name: Run tests
       run: mvn test
+
+    - name: Run integration tests
+      run: mvn verify -P integration-test
 ```
 
 2. 每次推送代码到 `main` 分支时，GitHub Actions 将自动运行测试。

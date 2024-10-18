@@ -7,12 +7,18 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.testcontainers.containers.DockerComposeContainer;
+import org.testcontainers.containers.wait.strategy.Wait;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
+import java.io.File;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@Testcontainers
 @SpringBootTest
 @ActiveProfiles("integration-test")
 public class IntegrationTests {
@@ -20,10 +26,14 @@ public class IntegrationTests {
     @Autowired
     private CartService cartService;
 
+    @Container
+    public static DockerComposeContainer<?> composeContainer = new DockerComposeContainer<>(new File("docker-compose.yml"))
+            .withExposedService("mysql_1", 3306, Wait.forListeningPort())
+            .withExposedService("redis_1", 6379, Wait.forListeningPort());
+
     @BeforeAll
     public static void setUp() {
-        // Set up Docker Compose services
-        // This can be done using Testcontainers or a similar library
+        composeContainer.start();
     }
 
     @Test
