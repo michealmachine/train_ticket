@@ -54,7 +54,7 @@ jobs:
 
     - name: Grant privileges to user
       run: |
-        mysql -h 127.0.0.1 -u root -prootpassword -e "GRANT ALL PRIVILEGES ON train_ticket.* TO 'user'@'%' IDENTIFIED BY 'password'; FLUSH PRIVILEGES;"
+        mysql -h 127.0.0.1 -u root -prootpassword -e "GRANT ALL PRIVILEGES ON train_ticket.* TO 'user'@'%'; FLUSH PRIVILEGES;"
 
     - name: Install dependencies
       run: mvn install -DskipTests
