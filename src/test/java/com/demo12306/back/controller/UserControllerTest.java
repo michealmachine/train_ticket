@@ -5,6 +5,7 @@ import com.demo12306.back.common.R;
 import com.demo12306.back.entity.User;
 import com.demo12306.back.service.UserService;
 import com.demo12306.back.utils.JwtUtils;
+import com.demo12306.back.model.Ticket;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

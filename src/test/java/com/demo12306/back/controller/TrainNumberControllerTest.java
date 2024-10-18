@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.demo12306.back.common.R;
 import com.demo12306.back.entity.RailNode;
 import com.demo12306.back.entity.TrainNumber;
+import com.demo12306.back.model.Ticket;
 import com.demo12306.back.service.TrainNumberService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
