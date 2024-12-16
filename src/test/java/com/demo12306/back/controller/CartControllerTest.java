@@ -15,6 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.web.util.WebUtils;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.List;
 
@@ -22,6 +24,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 public class CartControllerTest {
+
+    private MockMvc mockMvc;
 
     @Mock
     private CartService cartService;
@@ -32,6 +36,7 @@ public class CartControllerTest {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
+        mockMvc = MockMvcBuilders.standaloneSetup(cartController).build();
     }
 
     @Test

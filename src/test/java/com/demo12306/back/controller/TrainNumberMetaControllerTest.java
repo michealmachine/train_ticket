@@ -14,6 +14,8 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.List;
 
@@ -22,6 +24,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 public class TrainNumberMetaControllerTest {
+
+    private MockMvc mockMvc;
 
     @Mock
     private TrainNumberMetaService trainNumberMetaService;
@@ -35,6 +39,7 @@ public class TrainNumberMetaControllerTest {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
+        mockMvc = MockMvcBuilders.standaloneSetup(trainNumberMetaController).build();
     }
 
     @Test
