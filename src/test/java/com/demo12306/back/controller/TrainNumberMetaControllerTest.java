@@ -21,6 +21,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+import com.demo12306.back.entity.Ticket;
+import com.demo12306.back.service.TicketService;
+
 public class TrainNumberMetaControllerTest {
 
     @Mock
